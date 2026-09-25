@@ -20,6 +20,7 @@ st.set_page_config(
 try:
     model = joblib.load("churn_model.pkl")
     features = joblib.load("feature_info.pkl")
+
 except Exception as e:
     st.error("The prediction model could not be loaded.")
     st.error(f"Technical details: {e}")
@@ -32,6 +33,7 @@ except Exception as e:
 st.markdown(
     """
     <style>
+
     .main-title {
         font-size: 2.2rem;
         font-weight: 700;
@@ -44,18 +46,6 @@ st.markdown(
         margin-bottom: 1.2rem;
     }
 
-    .section-box {
-        padding: 12px 18px;
-        border-radius: 10px;
-        background-color: #f7f9fc;
-        border: 1px solid #e5e7eb;
-        margin-bottom: 15px;
-    }
-
-    .small-note {
-        font-size: 0.85rem;
-        color: #666666;
-    }
     </style>
     """,
     unsafe_allow_html=True
@@ -73,8 +63,8 @@ st.markdown(
 st.markdown(
     """
     <div class="subtitle">
-    Estimate the likelihood that a telecom customer may leave the company
-    and understand the key factors influencing the prediction.
+    Estimate how likely a telecom customer is to leave the company
+    and understand the key factors behind the prediction.
     </div>
     """,
     unsafe_allow_html=True
@@ -83,8 +73,8 @@ st.markdown(
 st.info(
     """
     **Decision-support tool:** This model uses patterns learned from
-    historical telecom customer data. It provides an additional input
-    for managerial decision-making and should not replace human judgment.
+    historical telecom customer data. It is intended to support
+    managerial decision-making and should not replace human judgment.
     """
 )
 
@@ -92,23 +82,20 @@ st.info(
 # HOW TO USE
 # ============================================================
 
-with st.expander("ℹ️ How to use this tool", expanded=False):
+with st.expander("ℹ️ How to use this tool"):
 
     st.write(
         """
-        **Step 1:** Enter the customer's available information.
+        **Step 1:** Enter the customer's information.
 
-        **Step 2:** Click **Predict Churn**.
+        **Step 2:** Click **Predict Customer Churn**.
 
-        **Step 3:** Review:
-        - Estimated churn probability
-        - Risk category
-        - Factors that pushed the prediction higher or lower
-        - Suggested managerial interpretation
+        **Step 3:** Review the estimated churn probability, risk level,
+        key factors and managerial interpretation.
 
-        **Important:** The model was trained on a specific telecom dataset.
-        The prediction should therefore be interpreted within the context
-        of telecom customers.
+        **Important:** This model was trained on telecom customer data.
+        It should not be used directly for another industry without
+        retraining and validation using relevant data.
         """
     )
 
@@ -118,91 +105,92 @@ with st.expander("ℹ️ How to use this tool", expanded=False):
 
 st.header("👤 1. Customer Information")
 
-with st.container():
+col1, col2, col3 = st.columns(3)
 
-    col1, col2, col3 = st.columns(3)
+# ------------------------------------------------------------
+# COLUMN 1
+# ------------------------------------------------------------
 
-    with col1:
+with col1:
 
-        age = st.number_input(
-            "Customer Age",
-            min_value=15,
-            max_value=100,
-            value=30,
-            step=1,
-            help="Enter the customer's age in years."
+    age = st.number_input(
+        "Customer Age",
+        min_value=15,
+        max_value=100,
+        value=30,
+        step=1,
+        help="Enter the customer's age in years."
+    )
+
+    age_group = st.selectbox(
+        "Age Group",
+        options=[1, 2, 3, 4, 5],
+        index=1,
+        format_func=lambda x: f"Age Group {x}",
+        help=(
+            "Select the age-group category recorded for the customer "
+            "in the company's customer data."
         )
+    )
 
-        age_group = st.selectbox(
-            "Age Category",
-            options=[1, 2, 3, 4, 5],
-            index=1,
-            format_func=lambda x: {
-                1: "1 – Younger age group",
-                2: "2 – Lower-middle age group",
-                3: "3 – Middle age group",
-                4: "4 – Older-middle age group",
-                5: "5 – Older age group"
-            }[x],
-            help=(
-                "The original dataset records age using five age categories. "
-                "Select the category corresponding to the customer's record."
-            )
+# ------------------------------------------------------------
+# COLUMN 2
+# ------------------------------------------------------------
+
+with col2:
+
+    subscription_length = st.number_input(
+        "Customer Tenure (months)",
+        min_value=0,
+        max_value=120,
+        value=20,
+        step=1,
+        help=(
+            "How many months the customer has been subscribed "
+            "to the telecom service."
         )
+    )
 
-    with col2:
+    tariff_plan = st.selectbox(
+        "Tariff Plan",
+        options=[1, 2],
+        format_func=lambda x: (
+            "1 – Pay as you go"
+            if x == 1
+            else "2 – Contractual"
+        ),
+        help="Select the customer's tariff/service plan."
+    )
 
-        subscription_length = st.number_input(
-            "Customer Tenure (months)",
-            min_value=0,
-            max_value=120,
-            value=20,
-            step=1,
-            help=(
-                "How many months the customer has been subscribed "
-                "to the telecom service."
-            )
+# ------------------------------------------------------------
+# COLUMN 3
+# ------------------------------------------------------------
+
+with col3:
+
+    charge_amount = st.number_input(
+        "Customer Charge Level (0–9)",
+        min_value=0,
+        max_value=9,
+        value=3,
+        step=1,
+        help=(
+            "This is not the rupee bill amount. "
+            "It is the charge-level scale used in the dataset: "
+            "0 = lowest charge level and 9 = highest charge level."
         )
+    )
 
-        tariff_plan = st.selectbox(
-            "Tariff Plan",
-            options=[1, 2],
-            format_func=lambda x: (
-                "1 – Pay as you go"
-                if x == 1
-                else "2 – Contractual"
-            ),
-            help=(
-                "Select the customer's type of tariff/service plan."
-            )
+    customer_value = st.number_input(
+        "Customer Value",
+        min_value=0.0,
+        value=200.0,
+        step=10.0,
+        help=(
+            "Enter the customer value recorded/calculated by the company. "
+            "This is the customer-value measure used by the model."
         )
-
-    with col3:
-
-        charge_amount = st.number_input(
-            "Customer Charge Level (0–9)",
-            min_value=0,
-            max_value=9,
-            value=3,
-            step=1,
-            help=(
-                "This is NOT the rupee bill amount. "
-                "It is the charge-level scale used in the original dataset: "
-                "0 = lowest charge level and 9 = highest charge level."
-            )
-        )
-
-        customer_value = st.number_input(
-            "Customer Value",
-            min_value=0.0,
-            value=200.0,
-            step=10.0,
-            help=(
-                "Enter the customer value recorded/calculated by the company. "
-                "This is the dataset's calculated customer-value measure; "
-                "it should not be interpreted simply as the customer's bill."
-            )
-        )
+    )
 
 # ============================================================
 # CUSTOMER USAGE
@@ -221,7 +209,7 @@ with col1:
         step=100,
         help=(
             "Total number of seconds the customer has used "
-            "for calls in the recorded period."
+            "for calls during the recorded period."
         )
     )
 
@@ -246,7 +234,7 @@ with col3:
         value=20,
         step=1,
         help=(
-            "Total number of SMS/text messages sent "
+            "Total number of SMS messages sent by the customer "
             "during the recorded period."
         )
     )
@@ -267,8 +255,8 @@ with col1:
         value=5,
         step=1,
         help=(
-            "Number of calls that failed or were unsuccessful "
-            "for this customer."
+            "Number of unsuccessful or failed calls "
+            "recorded for the customer."
         )
     )
 
@@ -332,37 +320,66 @@ if predict_button:
     }])
 
     # --------------------------------------------------------
+    # IMPORTANT:
+    # EXACT FEATURE ORDER USED DURING MODEL TRAINING
+    # --------------------------------------------------------
+
+    model_input = input_data[
+        [
+            "Call Failure",
+            "Complains",
+            "Subscription Length",
+            "Charge Amount",
+            "Seconds of Use",
+            "Frequency of use",
+            "Frequency of SMS",
+            "Distinct Called Numbers",
+            "Age Group",
+            "Tariff Plan",
+            "Age",
+            "Customer Value"
+        ]
+    ]
+
+    # --------------------------------------------------------
     # MAKE PREDICTION
     # --------------------------------------------------------
 
     try:
 
+        # Convert DataFrame to NumPy array.
+        # This avoids the feature-name mismatch error
+        # from the saved sklearn model.
+
         probability = float(
-            model.predict_proba(input_data)[0][1]
+            model.predict_proba(model_input.values)[0][1]
         )
 
     except Exception as e:
 
         st.error("The prediction could not be generated.")
+
         st.error(
-            "Please check that the input fields contain valid values "
-            "and that the model files match the training data."
+            "Please check that the model files match the training "
+            "data and that all input values are valid."
         )
+
         st.error(f"Technical details: {e}")
+
         st.stop()
 
     probability_percentage = probability * 100
 
     # --------------------------------------------------------
-    # FORMAT PROBABILITY
+    # PROBABILITY DISPLAY
     # --------------------------------------------------------
 
-    # More decimal places for very small probabilities.
-    # This prevents values such as 0.04% from appearing as 0.0%.
-
     if probability_percentage < 0.1:
+
         probability_display = f"{probability_percentage:.3f}%"
+
     else:
+
         probability_display = f"{probability_percentage:.2f}%"
 
     # --------------------------------------------------------
@@ -372,6 +389,7 @@ if predict_button:
     if probability < 0.30:
 
         risk_level = "LOW"
+
         risk_message = (
             "The model estimates a relatively low likelihood "
             "of churn for this customer."
@@ -380,6 +398,7 @@ if predict_button:
     elif probability < 0.60:
 
         risk_level = "MEDIUM"
+
         risk_message = (
             "The model estimates a moderate likelihood "
             "of churn for this customer."
@@ -388,13 +407,14 @@ if predict_button:
     else:
 
         risk_level = "HIGH"
+
         risk_message = (
             "The model estimates a relatively high likelihood "
             "of churn for this customer."
         )
 
     # ========================================================
-    # RESULT
+    # PREDICTION RESULT
     # ========================================================
 
     st.header("📊 4. Prediction Result")
@@ -413,8 +433,8 @@ if predict_button:
         )
 
         st.caption(
-            "This percentage represents the model's estimated probability "
-            "of churn for the entered customer profile."
+            "Estimated probability that the customer may churn "
+            "based on the information entered."
         )
 
     with col2:
@@ -422,47 +442,55 @@ if predict_button:
         if risk_level == "HIGH":
 
             st.error(
-                f"🔴 {risk_level} CHURN RISK"
+                "🔴 HIGH CHURN RISK"
             )
 
         elif risk_level == "MEDIUM":
 
             st.warning(
-                f"🟠 {risk_level} CHURN RISK"
+                "🟠 MEDIUM CHURN RISK"
             )
 
         else:
 
             st.success(
-                f"🟢 {risk_level} CHURN RISK"
+                "🟢 LOW CHURN RISK"
             )
 
         st.write(risk_message)
 
     # --------------------------------------------------------
-    # INTERPRETATION
+    # SIMPLE MANAGERIAL MESSAGE
     # --------------------------------------------------------
 
     if probability < 0.30:
 
         st.success(
-            "The model does not identify this customer as a high-priority "
-            "churn case based on the information entered."
+            """
+            **Managerial interpretation:** The model does not identify
+            this customer as a high-priority churn case based on the
+            information entered.
+            """
         )
 
     elif probability < 0.60:
 
         st.warning(
-            "The customer may deserve additional review. "
-            "Consider service history, complaints and customer value "
-            "before deciding on any retention action."
+            """
+            **Managerial interpretation:** This customer may deserve
+            additional review. Consider service history, complaints,
+            usage and customer value before deciding on any retention action.
+            """
         )
 
     else:
 
         st.error(
-            "The customer may deserve closer attention from the "
-            "retention team. Review the factors below before taking action."
+            """
+            **Managerial interpretation:** This customer may deserve
+            closer attention from the retention team. Review the factors
+            below before taking any action.
+            """
         )
 
     # ========================================================
@@ -473,29 +501,50 @@ if predict_button:
 
     st.write(
         """
-        The model uses patterns learned from historical telecom customers.
-        The factors below show which customer characteristics pushed the
-        model's estimate relatively higher or lower for this particular case.
+        The model learned patterns from historical telecom customers.
+        The factors below show which characteristics pushed the model's
+        estimated churn risk relatively higher or lower for this customer.
         """
     )
 
     # --------------------------------------------------------
-    # GET LOGISTIC REGRESSION COMPONENT
+    # MODEL EXPLANATION
     # --------------------------------------------------------
 
     try:
 
         logistic_model = model.named_steps["logistic_regression"]
+
         scaler = model.named_steps["scaler"]
 
-        scaled_input = scaler.transform(input_data)
+        # IMPORTANT:
+        # Use the same NumPy input used for prediction.
+
+        scaled_input = scaler.transform(
+            model_input.values
+        )
 
         coefficients = logistic_model.coef_[0]
 
-        contributions = scaled_input[0] * coefficients
+        contributions = (
+            scaled_input[0] * coefficients
+        )
 
         explanation_df = pd.DataFrame({
-            "Variable": features,
+            "Variable": [
+                "Call Failure",
+                "Complains",
+                "Subscription Length",
+                "Charge Amount",
+                "Seconds of Use",
+                "Frequency of use",
+                "Frequency of SMS",
+                "Distinct Called Numbers",
+                "Age Group",
+                "Tariff Plan",
+                "Age",
+                "Customer Value"
+            ],
             "Contribution": contributions
         })
 
@@ -511,22 +560,46 @@ if predict_button:
         top_factors = explanation_df.head(5)
 
         # ----------------------------------------------------
-        # FRIENDLY VARIABLE NAMES
+        # FRIENDLY NAMES
         # ----------------------------------------------------
 
         friendly_names = {
-            "Call Failure": "Call failures",
-            "Complains": "Customer complaint",
-            "Subscription Length": "Customer tenure",
-            "Charge Amount": "Charge level",
-            "Seconds of Use": "Call usage",
-            "Frequency of use": "Number of calls",
-            "Frequency of SMS": "Number of SMS",
-            "Distinct Called Numbers": "Different numbers called",
-            "Age Group": "Age category",
-            "Tariff Plan": "Tariff plan",
-            "Age": "Customer age",
-            "Customer Value": "Customer value"
+
+            "Call Failure":
+                "Call failures",
+
+            "Complains":
+                "Customer complaint",
+
+            "Subscription Length":
+                "Customer tenure",
+
+            "Charge Amount":
+                "Charge level",
+
+            "Seconds of Use":
+                "Call usage",
+
+            "Frequency of use":
+                "Number of calls",
+
+            "Frequency of SMS":
+                "Number of SMS",
+
+            "Distinct Called Numbers":
+                "Different numbers called",
+
+            "Age Group":
+                "Age group",
+
+            "Tariff Plan":
+                "Tariff plan",
+
+            "Age":
+                "Customer age",
+
+            "Customer Value":
+                "Customer value"
         }
 
         # ----------------------------------------------------
@@ -536,6 +609,7 @@ if predict_button:
         for _, row in top_factors.iterrows():
 
             variable = row["Variable"]
+
             contribution = row["Contribution"]
 
             friendly_variable = friendly_names.get(
@@ -547,14 +621,14 @@ if predict_button:
 
                 st.write(
                     f"🔴 **{friendly_variable}** — "
-                    "pushed the model's predicted churn risk higher."
+                    "pushed the model's estimated churn risk higher."
                 )
 
             elif contribution < 0:
 
                 st.write(
                     f"🟢 **{friendly_variable}** — "
-                    "pushed the model's predicted churn risk lower."
+                    "pushed the model's estimated churn risk lower."
                 )
 
             else:
@@ -588,10 +662,9 @@ if predict_button:
             **What this means:** The model estimates a relatively low
             probability of churn for this customer.
 
-            **Managerial use:** This does not mean the customer will
-            definitely remain. Managers can combine this result with
-            recent complaints, service quality, customer interactions
-            and other business information.
+            **How a manager can use it:** Combine this result with
+            customer complaints, service quality, recent interactions
+            and other business information before making a decision.
             """
         )
 
@@ -599,13 +672,12 @@ if predict_button:
 
         st.write(
             """
-            **What this means:** The model estimates a moderate probability
-            of churn.
+            **What this means:** The model estimates a moderate
+            probability of churn.
 
-            **Managerial use:** The customer may be worth reviewing more
-            closely. A manager can examine recent service issues, complaints,
-            usage patterns and customer value before deciding whether
-            proactive retention action is appropriate.
+            **How a manager can use it:** Review the customer's service
+            history, complaints, usage patterns and customer value before
+            deciding whether proactive retention action is appropriate.
             """
         )
 
@@ -616,20 +688,22 @@ if predict_button:
             **What this means:** The model estimates a relatively high
             probability of churn.
 
-            **Managerial use:** The customer may deserve closer attention
-            from the retention team. Managers should review the underlying
+            **How a manager can use it:** The customer may deserve closer
+            attention from the retention team. Review the underlying
             customer information and business context before taking action.
             """
         )
 
     # ========================================================
-    # DATA QUALITY CHECK
+    # INPUT SUMMARY
     # ========================================================
 
-    st.header("📝 7. Input Summary")
+    st.header("📝 7. Customer Information Summary")
 
     summary_data = pd.DataFrame({
+
         "Customer Information": [
+
             "Age",
             "Tenure",
             "Tariff Plan",
@@ -642,18 +716,38 @@ if predict_button:
             "Different Numbers Called",
             "Complaint"
         ],
+
         "Entered Value": [
+
             f"{age} years",
+
             f"{subscription_length} months",
-            "Pay as you go" if tariff_plan == 1 else "Contractual",
+
+            (
+                "Pay as you go"
+                if tariff_plan == 1
+                else "Contractual"
+            ),
+
             charge_amount,
+
             customer_value,
+
             f"{seconds_use} seconds",
+
             frequency_use,
+
             frequency_sms,
+
             call_failure,
+
             distinct_called_numbers,
-            "Yes" if complains == 1 else "No"
+
+            (
+                "Yes"
+                if complains == 1
+                else "No"
+            )
         ]
     })
 
@@ -677,14 +771,15 @@ if predict_button:
             may churn based on historical customer characteristics,
             usage and service information.
 
-            **Important:** A probability is not a certainty. For example,
-            a 60% predicted probability does not mean that the customer
-            will definitely churn.
+            **Important:** A probability is not a certainty.
+
+            For example, a 60% predicted probability does not mean that
+            the customer will definitely leave.
 
             This model was trained on a specific telecom customer dataset.
-            Its results should therefore not be directly transferred to
-            another industry without retraining and validating the model
-            using relevant industry-specific data.
+            Its results should not be directly transferred to another
+            industry without retraining and validating the model using
+            relevant industry-specific data.
 
             The prediction is intended to support managerial decision-making,
             not replace managerial judgment.
@@ -692,13 +787,13 @@ if predict_button:
         )
 
     # ========================================================
-    # TECHNICAL CHECK FOR VERY SMALL PROBABILITIES
+    # TECHNICAL INFORMATION
     # ========================================================
 
-    with st.expander("🔧 Technical information"):
+    with st.expander("🔧 Technical Information"):
 
         st.write(
-            "The model returned a raw churn probability of:"
+            "Raw model probability:"
         )
 
         st.code(
@@ -706,7 +801,6 @@ if predict_button:
         )
 
         st.caption(
-            "This section is included for transparency and testing. "
-            "It can be hidden or removed before the final managerial "
-            "user study if you want a cleaner interface."
+            "This value is shown for transparency and testing. "
+            "It can be removed from the final version if desired."
         )
