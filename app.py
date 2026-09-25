@@ -9,7 +9,7 @@ import joblib
 
 st.set_page_config(
     page_title="Customer Retention Intelligence",
-    page_icon="📡",
+    page_icon="📊",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -29,83 +29,30 @@ except Exception as e:
 
 
 # ============================================================
-# CUSTOM CSS
+# SIMPLE PAGE STYLING
 # ============================================================
 
 st.markdown(
     """
     <style>
 
-    /* Main page */
-    .block-container {
-        padding-top: 2rem;
-        padding-bottom: 3rem;
-        max-width: 1200px;
-    }
-
-    /* Header */
-    .hero {
-        padding: 28px 32px;
-        border-radius: 18px;
-        background: linear-gradient(
-            135deg,
-            #0f172a 0%,
-            #1e3a8a 55%,
-            #2563eb 100%
-        );
-        color: white;
-        margin-bottom: 25px;
-    }
-
-    .hero-title {
-        font-size: 2.35rem;
-        font-weight: 750;
-        margin-bottom: 6px;
-    }
-
-    .hero-subtitle {
-        font-size: 1.05rem;
-        opacity: 0.90;
-        margin-bottom: 15px;
-    }
-
-    .hero-tag {
-        display: inline-block;
-        padding: 6px 12px;
-        border-radius: 20px;
-        background-color: rgba(255,255,255,0.14);
-        font-size: 0.85rem;
-    }
-
-    /* Section headings */
-    .section-title {
-        font-size: 1.45rem;
+    .main-title {
+        font-size: 2.1rem;
         font-weight: 700;
-        margin-top: 20px;
-        margin-bottom: 12px;
+        margin-bottom: 0px;
     }
 
-    /* Prediction card */
-    .prediction-card {
-        padding: 22px;
-        border-radius: 15px;
-        background-color: #f8fafc;
-        border: 1px solid #e2e8f0;
-    }
-
-    /* Small text */
-    .small-text {
-        font-size: 0.85rem;
+    .sub-title {
+        font-size: 1.05rem;
         color: #64748b;
+        margin-top: 2px;
     }
 
-    /* Workflow */
-    .workflow {
-        padding: 15px;
-        border-radius: 12px;
-        background-color: #f8fafc;
-        border: 1px solid #e2e8f0;
-        text-align: center;
+    .section-title {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-top: 12px;
+        margin-bottom: 8px;
     }
 
     </style>
@@ -115,29 +62,43 @@ st.markdown(
 
 
 # ============================================================
-# PROFESSIONAL HEADER
+# ASSIGNMENT / GROUP HEADER
 # ============================================================
 
-st.markdown(
-    """
-    <div class="hero">
+with st.container(border=True):
 
-        <div class="hero-title">
-            📡 Customer Retention Intelligence
-        </div>
+    st.markdown(
+        '<div class="main-title">📊 BA Assignment – Group 06 | Section A</div>',
+        unsafe_allow_html=True
+    )
 
-        <div class="hero-subtitle">
-            AI-powered customer churn assessment for telecom decision-making
-        </div>
+    st.markdown(
+        '<div class="sub-title">Customer Retention Intelligence</div>',
+        unsafe_allow_html=True
+    )
 
-        <div class="hero-tag">
-            Logistic Regression • Predictive Analytics • Decision Support
-        </div>
+    st.caption(
+        "AI-powered customer churn assessment for telecom decision-making"
+    )
 
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+    st.divider()
+
+    st.markdown("### 👥 Group Members")
+
+    member_col1, member_col2 = st.columns(2)
+
+    with member_col1:
+
+        st.write("**Prerana Pandey** — P46046")
+        st.write("**Siddhartha Sinha** — P46059")
+        st.write("**Devansh Saran** — P46091")
+        st.write("**Rahul Raj** — P46120")
+
+    with member_col2:
+
+        st.write("**Anushka Upadhyay** — P46234")
+        st.write("**Manohar M D** — P46250")
+        st.write("**Abhirup Das** — P46221")
 
 
 # ============================================================
@@ -149,15 +110,16 @@ st.info(
     **Managerial Decision-Support Tool**
 
     This application estimates the likelihood of customer churn using
-    patterns learned from historical telecom customer data. The result
-    should be used as an additional input for managerial decisions and
-    should not replace human judgment.
+    patterns learned from historical telecom customer data.
+
+    The result is an additional input for managerial decision-making
+    and should not replace human judgment.
     """
 )
 
 
 # ============================================================
-# HOW IT WORKS
+# HOW THE TOOL WORKS
 # ============================================================
 
 with st.expander("🔎 How does this tool work?"):
@@ -165,60 +127,28 @@ with st.expander("🔎 How does this tool work?"):
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.markdown(
-            """
-            <div class="workflow">
-            👤<br>
-            <b>Customer Data</b><br>
-            <span class="small-text">
-            Enter customer information
-            </span>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+
+        st.markdown("### 👤")
+        st.markdown("**Customer Data**")
+        st.caption("Enter customer information.")
 
     with col2:
-        st.markdown(
-            """
-            <div class="workflow">
-            ⚙️<br>
-            <b>AI Model</b><br>
-            <span class="small-text">
-            Analyse customer patterns
-            </span>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+
+        st.markdown("### ⚙️")
+        st.markdown("**AI Model**")
+        st.caption("Model analyses customer patterns.")
 
     with col3:
-        st.markdown(
-            """
-            <div class="workflow">
-            📊<br>
-            <b>Churn Probability</b><br>
-            <span class="small-text">
-            Estimate likelihood of churn
-            </span>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+
+        st.markdown("### 📊")
+        st.markdown("**Churn Probability**")
+        st.caption("Estimate likelihood of churn.")
 
     with col4:
-        st.markdown(
-            """
-            <div class="workflow">
-            💼<br>
-            <b>Managerial Review</b><br>
-            <span class="small-text">
-            Combine AI with judgment
-            </span>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+
+        st.markdown("### 💼")
+        st.markdown("**Managerial Review**")
+        st.caption("Combine AI with human judgment.")
 
 
 # ============================================================
@@ -239,41 +169,73 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
 
-    age = st.selectbox(
+    age = st.number_input(
         "Customer Age",
-        options=[15, 25, 30, 45, 55],
-        index=2,
-        format_func=lambda x: f"{x} years",
+        min_value=15,
+        max_value=55,
+        value=30,
+        step=1,
         help=(
-            "Select the customer's age from the age values represented "
-            "in the historical dataset."
+            "Enter the customer's actual age in years."
         )
     )
 
-    # Convert age to the Age Group used by the trained model.
-    age_group_mapping = {
-        15: 1,
-        25: 2,
-        30: 3,
-        45: 4,
-        55: 5
-    }
 
-    age_group = age_group_mapping[age]
+# ------------------------------------------------------------
+# AGE GROUP
+# ------------------------------------------------------------
+
+with col2:
+
+    age_group = st.selectbox(
+
+        "Age Category",
+
+        options=[1, 2, 3, 4, 5],
+
+        format_func=lambda x: {
+
+            1: "1 – Youngest age group",
+
+            2: "2 – Younger age group",
+
+            3: "3 – Middle age group",
+
+            4: "4 – Older age group",
+
+            5: "5 – Oldest age group"
+
+        }[x],
+
+        index=2,
+
+        help=(
+            "This is the Age Group variable used in the historical "
+            "dataset. The dataset defines 1 as younger and 5 as older. "
+            "If your customer record provides an age-group category, "
+            "select the corresponding category."
+        )
+    )
 
 
 # ------------------------------------------------------------
 # CUSTOMER TENURE
 # ------------------------------------------------------------
 
-with col2:
+with col3:
 
     subscription_length = st.number_input(
+
         "Customer Tenure (months)",
+
         min_value=0,
-        max_value=100,
+
+        max_value=60,
+
         value=20,
+
         step=1,
+
         help=(
             "Number of months the customer has been subscribed "
             "to the telecom service."
@@ -281,62 +243,71 @@ with col2:
     )
 
 
-# ------------------------------------------------------------
-# TARIFF PLAN
-# ------------------------------------------------------------
-
-with col3:
-
-    tariff_plan = st.selectbox(
-        "Tariff Plan",
-        options=[1, 2],
-        format_func=lambda x: (
-            "1 – Pay as you go"
-            if x == 1
-            else "2 – Contractual"
-        ),
-        help=(
-            "Select the type of tariff/service plan used by "
-            "the customer."
-        )
-    )
-
-
 # ============================================================
-# CUSTOMER VALUE & CHARGES
+# PLAN AND CUSTOMER VALUE
 # ============================================================
 
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 
 
 with col1:
 
-    charge_amount = st.number_input(
-        "Customer Charge Level (0–9)",
-        min_value=0,
-        max_value=9,
-        value=3,
-        step=1,
+    tariff_plan = st.selectbox(
+
+        "Tariff Plan",
+
+        options=[1, 2],
+
+        format_func=lambda x:
+            "1 – Pay as you go"
+            if x == 1
+            else "2 – Contractual",
+
         help=(
-            "This is not the customer's rupee bill. "
-            "It is the charge-level scale used in the historical "
-            "dataset: 0 = lowest and 9 = highest."
+            "Select the customer's telecom service plan."
         )
     )
 
 
 with col2:
 
-    customer_value = st.number_input(
-        "Customer Value",
-        min_value=0.0,
-        max_value=5000.0,
-        value=200.0,
-        step=10.0,
+    charge_amount = st.number_input(
+
+        "Customer Charge Level (0–9)",
+
+        min_value=0,
+
+        max_value=9,
+
+        value=3,
+
+        step=1,
+
         help=(
-            "Enter the customer value recorded or calculated by "
-            "the company. This is the customer-value measure "
-            "used by the model."
+            "This is NOT the rupee bill amount. "
+            "It is the charge-level scale used in the dataset: "
+            "0 = lowest charge level and 9 = highest charge level."
+        )
+    )
+
+
+with col3:
+
+    customer_value = st.number_input(
+
+        "Customer Value",
+
+        min_value=0.0,
+
+        max_value=2500.0,
+
+        value=200.0,
+
+        step=10.0,
+
+        help=(
+            "Enter the customer value recorded or calculated "
+            "by the company."
         )
     )
 
@@ -356,11 +327,17 @@ col1, col2, col3 = st.columns(3)
 with col1:
 
     seconds_use = st.number_input(
+
         "Total Call Usage (seconds)",
+
         min_value=0,
-        max_value=50000,
+
+        max_value=20000,
+
         value=3000,
+
         step=100,
+
         help=(
             "Total number of seconds the customer has used "
             "for calls during the recorded period."
@@ -371,11 +348,17 @@ with col1:
 with col2:
 
     frequency_use = st.number_input(
+
         "Number of Calls",
+
         min_value=0,
-        max_value=500,
+
+        max_value=300,
+
         value=30,
+
         step=1,
+
         help=(
             "Total number of calls made by the customer "
             "during the recorded period."
@@ -386,11 +369,17 @@ with col2:
 with col3:
 
     frequency_sms = st.number_input(
+
         "Number of SMS",
+
         min_value=0,
-        max_value=1000,
+
+        max_value=550,
+
         value=20,
+
         step=1,
+
         help=(
             "Total number of SMS messages sent by the customer "
             "during the recorded period."
@@ -413,14 +402,20 @@ col1, col2, col3 = st.columns(3)
 with col1:
 
     call_failure = st.number_input(
+
         "Number of Call Failures",
+
         min_value=0,
-        max_value=100,
+
+        max_value=40,
+
         value=5,
+
         step=1,
+
         help=(
             "Number of unsuccessful or failed calls "
-            "recorded for this customer."
+            "recorded for the customer."
         )
     )
 
@@ -428,11 +423,17 @@ with col1:
 with col2:
 
     distinct_called_numbers = st.number_input(
+
         "Different Numbers Called",
+
         min_value=0,
-        max_value=150,
+
+        max_value=100,
+
         value=20,
+
         step=1,
+
         help=(
             "Number of different phone numbers contacted "
             "by the customer."
@@ -443,17 +444,23 @@ with col2:
 with col3:
 
     complains = st.selectbox(
+
         "Has the Customer Made a Complaint?",
+
         options=[0, 1],
-        format_func=lambda x: "No" if x == 0 else "Yes",
+
+        format_func=lambda x:
+            "No" if x == 0 else "Yes",
+
         help=(
-            "Select Yes if the customer has registered a complaint."
+            "Select Yes if the customer has registered "
+            "a complaint."
         )
     )
 
 
 # ============================================================
-# PREDICT BUTTON
+# PREDICTION BUTTON
 # ============================================================
 
 st.divider()
@@ -472,7 +479,7 @@ predict_button = st.button(
 if predict_button:
 
     # --------------------------------------------------------
-    # CREATE MODEL INPUT
+    # CREATE INPUT DATA
     # --------------------------------------------------------
 
     input_data = pd.DataFrame([{
@@ -505,7 +512,7 @@ if predict_button:
 
 
     # --------------------------------------------------------
-    # EXACT FEATURE ORDER USED DURING TRAINING
+    # EXACT FEATURE ORDER USED DURING MODEL TRAINING
     # --------------------------------------------------------
 
     model_input = input_data[
@@ -576,7 +583,7 @@ if predict_button:
 
 
     # ========================================================
-    # RISK LEVEL
+    # RISK CATEGORY
     # ========================================================
 
     if probability < 0.30:
@@ -608,7 +615,7 @@ if predict_button:
 
 
     # ========================================================
-    # PREDICTION RESULT
+    # RESULT
     # ========================================================
 
     st.markdown(
@@ -644,7 +651,7 @@ if predict_button:
 
 
     # --------------------------------------------------------
-    # RISK LEVEL
+    # RISK
     # --------------------------------------------------------
 
     with col2:
@@ -730,24 +737,19 @@ if predict_button:
     try:
 
         # ----------------------------------------------------
-        # GET LOGISTIC REGRESSION AND SCALER
+        # LOGISTIC REGRESSION + SCALER
         # ----------------------------------------------------
 
-        logistic_model = (
-            model.named_steps[
-                "logistic_regression"
-            ]
-        )
+        logistic_model = model.named_steps[
+            "logistic_regression"
+        ]
 
-        scaler = (
-            model.named_steps[
-                "scaler"
-            ]
-        )
+        scaler = model.named_steps[
+            "scaler"
+        ]
 
 
-        # IMPORTANT:
-        # Use the exact same input used for prediction.
+        # Use exactly the same input used for prediction.
 
         scaled_input = scaler.transform(
             model_input.values
@@ -765,14 +767,17 @@ if predict_button:
 
 
         # ----------------------------------------------------
-        # NORMALISE FEATURE NAMES
+        # CLEAN FEATURE NAMES
         # ----------------------------------------------------
 
         clean_features = [
+
             str(feature)
             .replace("  ", " ")
             .strip()
+
             for feature in features
+
         ]
 
 
@@ -808,7 +813,7 @@ if predict_button:
 
 
         # ----------------------------------------------------
-        # FRIENDLY VARIABLE NAMES
+        # FRIENDLY NAMES
         # ----------------------------------------------------
 
         friendly_names = {
@@ -838,7 +843,7 @@ if predict_button:
                 "Different numbers called",
 
             "Age Group":
-                "Age group",
+                "Age category",
 
             "Tariff Plan":
                 "Tariff plan",
@@ -852,16 +857,14 @@ if predict_button:
 
 
         # ----------------------------------------------------
-        # DISPLAY FACTORS
+        # DISPLAY TOP FACTORS
         # ----------------------------------------------------
 
         for _, row in top_factors.iterrows():
 
             variable = row["Variable"]
 
-            contribution = (
-                row["Contribution"]
-            )
+            contribution = row["Contribution"]
 
             friendly_variable = (
                 friendly_names.get(
@@ -961,6 +964,7 @@ if predict_button:
             "Customer Information": [
 
                 "Customer Age",
+                "Age Category",
                 "Customer Tenure",
                 "Tariff Plan",
                 "Charge Level",
@@ -977,6 +981,8 @@ if predict_button:
             "Entered Value": [
 
                 f"{age} years",
+
+                f"Age Group {age_group}",
 
                 f"{subscription_length} months",
 
@@ -1005,7 +1011,9 @@ if predict_button:
                     if complains == 1
                     else "No"
                 )
+
             ]
+
         })
 
 
@@ -1048,7 +1056,7 @@ if predict_button:
 
 
     # ========================================================
-    # TECHNICAL TRANSPARENCY
+    # TECHNICAL INFORMATION
     # ========================================================
 
     with st.expander(
@@ -1064,5 +1072,5 @@ if predict_button:
         )
 
         st.caption(
-            "This is provided for transparency and testing."
+            "This section is provided for transparency and testing."
         )
